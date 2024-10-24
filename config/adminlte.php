@@ -312,7 +312,11 @@ return [
 
         // Sidebar items:
 
-
+        [
+            'text' => 'Category',
+            'url' => 'admin/categories',
+            'icon' => 'fas fa-fw fa-tags'
+        ],
         [
             'text' => 'Event',
             'url' => 'admin/settings',
@@ -359,7 +363,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
