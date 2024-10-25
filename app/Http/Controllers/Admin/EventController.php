@@ -29,7 +29,7 @@ class EventController extends BaseController
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->editColumn('title', function ($row) {
-                    return '<p class="text-dark-75 font-weight-normal d-block font-size-h6">' . ' ' . $row->name . '</p>';
+                    return '<p class="text-dark-75 font-weight-normal d-block font-size-h6">' . $row->title . '</p>';
                 })
 
                 ->addColumn('action', function ($data) {
@@ -39,7 +39,7 @@ class EventController extends BaseController
                     ])->render();
                 })
 
-                ->rawColumns(['action', 'name'])
+                ->rawColumns(['action', 'title'])
                 ->make(true);
         }
 
@@ -64,6 +64,8 @@ class EventController extends BaseController
     {
         $request->validate([
             'title' => 'required',
+            'location' => 'required',
+            'date' => 'required'
 
         ]);
         $data = $request->all();
@@ -79,7 +81,7 @@ class EventController extends BaseController
     public function show($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = Event::findOrFail($id);
+        $info['item'] = Event::with(['category'])->findOrFail($id);
         return view($this->showResource(), $info);
     }
 
@@ -91,6 +93,7 @@ class EventController extends BaseController
         $info = $this->crudInfo();
         $info['item'] = Event::findOrFail($id);
         //        dd($info);
+        $info['categories'] = Category::pluck('name', 'id');
         return view($this->editResource(), $info);
     }
 
@@ -102,6 +105,8 @@ class EventController extends BaseController
 
         $request->validate([
             'title' => 'required',
+            'location' => 'required',
+            'date' => 'required'
 
         ]);
         $data = $request->all();

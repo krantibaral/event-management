@@ -33,7 +33,7 @@
             var table = $('#data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('categories.index') }}",
+                ajax: "{{ route('events.index') }}",
                 columns: [{
                         data: 'id',
                         name: 'DT_RowIndex'

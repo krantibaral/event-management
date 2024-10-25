@@ -6,12 +6,7 @@
     </div>
 </div>
 
-<div class="form-group row">
-    <div class="col-md-12">
-        <label for="description">Description *</label>
-        <textarea required class="form-control" name="description" rows="4" placeholder="Enter event description">{{ old('description', $item->description ?? '') }}</textarea>
-    </div>
-</div>
+
 
 <div class="form-group row">
     <div class="col-md-6">
@@ -30,10 +25,16 @@
     <select class="form-control" name="category_id" id="category_id">
         <option value="">Select Category</option>
         @foreach ($categories as $categoryId => $categoryName)
-            <option value="{{ $categoryId }}"
-                {{ old('category_id', $item->category_id ?? '') == $categoryId ? 'selected' : '' }}>
+            <option value="{{ $categoryId }}" {{ old('category_id', $item->category_id ?? '') == $categoryId ? 'selected' : '' }}>
                 {{ $categoryName }}
             </option>
         @endforeach
     </select>
+</div>
+<div class="form-group row">
+    <div class="col-md-12">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" rows="4"
+            placeholder="Enter event description">{{ old('description', $item->description ?? '') }}</textarea>
+    </div>
 </div>
