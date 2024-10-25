@@ -20,6 +20,7 @@ return new class extends Migration {
                 ->constrained('categories')
                 ->onDelete('cascade');            //cascade delete if category is deleted
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

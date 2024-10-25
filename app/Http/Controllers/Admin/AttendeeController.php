@@ -2,44 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Event;
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
+use App\Models\Attendee;
+use App\Models\Event;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use Yajra\DataTables\DataTables;
 
-class EventController extends BaseController
+class AttendeeController extends BaseController
 {
     public function __construct()
     {
-
-        $this->title = 'Events';
-        $this->resources = 'admin.events.';
-        $this->route = 'events.';
-
+        $this->title = 'Attendees';
+        $this->resources = 'admin.attendees.';
+        $this->route = 'attendees.';
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Event::with('category')->orderBy('id', 'DESC')->get();
+            $data = Attendee::with('event')->orderBy('id', 'DESC')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('title', function ($row) {
-                    return '<p class="text-dark-75 font-weight-normal d-block font-size-h6">' . $row->title . '</p>';
+                ->editColumn('name', function ($row) {
+                    return '<p class="text-dark-75 font-weight-normal d-block font-size-h6">' . $row->name . '</p>';
                 })
-
+                ->editColumn('event_id', function ($row) {
+                    return $row->event->title ?? 'N/A';
+                })
                 ->addColumn('action', function ($data) {
                     return view('admin.templates.index_actions', [
                         'id' => $data->id,
                         'route' => $this->route
                     ])->render();
                 })
-
-                ->rawColumns(['action', 'title'])
+                ->rawColumns(['action', 'name'])
                 ->make(true);
         }
 
@@ -53,7 +52,7 @@ class EventController extends BaseController
     public function create()
     {
         $info = $this->crudInfo();
-        $info['categories'] = Category::pluck('name', 'id');
+        $info['events'] = Event::pluck('title', 'id');
         return view($this->createResource(), $info);
     }
 
@@ -63,14 +62,12 @@ class EventController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'location' => 'required',
-            'date' => 'required'
-
+            'name' => 'required',
+            'email' => 'required|email',
+            'event_id' => 'required|exists:events,id',
         ]);
-        $data = $request->all();
-        $category = new Event($data);
-        $category->save();
+
+        Attendee::create($request->all());
 
         return redirect()->route($this->indexRoute());
     }
@@ -81,7 +78,7 @@ class EventController extends BaseController
     public function show($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = Event::with(['category'])->findOrFail($id);
+        $info['item'] = Attendee::with(['event'])->findOrFail($id);
         return view($this->showResource(), $info);
     }
 
@@ -91,9 +88,8 @@ class EventController extends BaseController
     public function edit($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = Event::findOrFail($id);
-        //        dd($info);
-        $info['categories'] = Category::pluck('name', 'id');
+        $info['item'] = Attendee::findOrFail($id);
+        $info['events'] = Event::pluck('title', 'id');
         return view($this->editResource(), $info);
     }
 
@@ -102,17 +98,15 @@ class EventController extends BaseController
      */
     public function update(Request $request, $id)
     {
-
         $request->validate([
-            'title' => 'required',
-            'location' => 'required',
-            'date' => 'required'
-
+            'name' => 'required',
+            'email' => 'required|email',
+            'event_id' => 'required|exists:events,id',
         ]);
-        $data = $request->all();
-        $item = Event::findOrFail($id);
-        $item->update($data);
 
+        $data = $request->all();
+        $item = Attendee::findOrFail($id);
+        $item->update($data);
 
         return redirect()->route($this->indexRoute());
     }
@@ -123,7 +117,7 @@ class EventController extends BaseController
     public function destroy($id)
     {
         try {
-            $item = Event::findOrFail($id);
+            $item = Attendee::findOrFail($id);
 
             $item->delete();
         } catch (\Exception $e) {

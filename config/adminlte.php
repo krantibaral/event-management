@@ -322,6 +322,11 @@ return [
             'url' => 'admin/events',
             'icon' => 'fas fa-fw fa-calendar-alt',
         ],
+        [
+            'text' => 'Attendee',
+            'url' => 'admin/attendees',
+            'icon' => 'fas fa-fw fa-calendar-alt',
+        ],
 
 
 
