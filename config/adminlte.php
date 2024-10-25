@@ -319,7 +319,7 @@ return [
         ],
         [
             'text' => 'Event',
-            'url' => 'admin/settings',
+            'url' => 'admin/events',
             'icon' => 'fas fa-fw fa-calendar-alt',
         ],
 
