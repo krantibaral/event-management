@@ -36,11 +36,7 @@
                                 @endif
                                 @yield('form_content')
 
-                                <!-- Replace this textarea with your desired content area -->
-                                <div class="form-group">
-                                    <label for="content">Content</label>
-                                    <textarea id="content" name="content" class="form-control" rows="5"></textarea>
-                                </div>
+
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>
