@@ -14,33 +14,33 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-      
         $categories = Category::all();
 
-     
         if ($categories->isEmpty()) {
             $this->command->info('No categories found. Please run the CategorySeeder first.');
             return;
         }
 
-     
-        $titles = ['Annual Event', 'Tech Event', 'Innovation Event'];
-        $locations = ['Pokhara', 'Kathmandu', 'Hetauda'];
+       
+        $titles = ['Annual Event', 'Tech Event', 'Innovation Event', 'Networking Event', 'Workshop Event'];
+        $locations = ['Pokhara', 'Kathmandu', 'Hetauda', 'Lalitpur', 'Bhaktapur'];
 
         $descriptions = [
             'A great event to learn and grow.',
             'Join us for an informative session.',
-            'Expand your network and knowledge.'
+            'Expand your network and knowledge.',
+            'Meet industry leaders and innovators.',
+            'Hands-on workshop with experts.'
         ];
 
-      
-        foreach ($categories as $index => $category) {
+     
+        for ($i = 0; $i < 5; $i++) {
             Event::create([
-                'title' => $titles[$index],
-                'description' => $descriptions[$index],
-                'date' => Carbon::now()->addDays(rand(1, 30)), 
-                'location' => $locations[$index],
-                'category_id' => $category->id,
+                'title' => $titles[$i],
+                'description' => $descriptions[$i],
+                'date' => Carbon::now()->addDays(rand(1, 30)),
+                'location' => $locations[$i],
+                'category_id' => $categories[$i % count($categories)]->id, //categories is cyclically distributed
             ]);
         }
     }

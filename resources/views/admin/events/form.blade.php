@@ -33,8 +33,8 @@
 </div>
 <div class="form-group row">
     <div class="col-md-12">
-        <label for="description">Description</label>
-        <textarea class="form-control" name="description" rows="4"
+        <label for="description">Description *</label>
+        <textarea required class="form-control" name="description" rows="4"
             placeholder="Enter event description">{{ old('description', $item->description ?? '') }}</textarea>
     </div>
 </div>

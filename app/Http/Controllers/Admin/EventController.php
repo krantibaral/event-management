@@ -72,7 +72,8 @@ class EventController extends BaseController
         $request->validate([
             'title' => 'required',
             'location' => 'required',
-            'date' => 'required'
+            'date' => 'required',
+            'description' => 'required',
 
         ]);
         $data = $request->all();
@@ -117,7 +118,8 @@ class EventController extends BaseController
         $request->validate([
             'title' => 'required',
             'location' => 'required',
-            'date' => 'required'
+            'date' => 'required',
+            'description' => 'required',
 
         ]);
         $data = $request->all();

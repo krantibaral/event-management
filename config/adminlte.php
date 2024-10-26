@@ -325,7 +325,7 @@ return [
         [
             'text' => 'Attendee',
             'url' => 'admin/attendees',
-            'icon' => 'fas fa-fw fa-calendar-alt',
+            'icon' => 'fas fa-fw fa-user'
         ],
 
 
