@@ -19,9 +19,9 @@
         <label for="">Event *</label>
         <select required class="form-control" name="event_id">
             <option value="">Select Event</option>
-            @foreach($events as $event)
-                <option value="{{ $event->id }}" {{ old('event_id', $item->event_id) == $event->id ? 'selected' : '' }}>
-                    {{ $event->title }}
+            @foreach($events as $eventId => $eventName)
+                <option value="{{ $eventId }}" {{ old('event_id', $item->event_id ?? '') == $eventId ? 'selected' : '' }}>
+                    {{ $eventName }}
                 </option>
             @endforeach
         </select>

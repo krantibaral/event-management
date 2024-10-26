@@ -31,6 +31,13 @@ class EventController extends BaseController
                 ->editColumn('title', function ($row) {
                     return '<p class="text-dark-75 font-weight-normal d-block font-size-h6">' . $row->title . '</p>';
                 })
+                ->editColumn('attendees', function ($row) {
+
+                    if ($row->attendees->isNotEmpty()) {
+                        return $row->attendees->pluck('name')->implode(', ');
+                    }
+                    return 'No attendees';
+                })
 
                 ->addColumn('action', function ($data) {
                     return view('admin.templates.index_actions', [
@@ -81,7 +88,11 @@ class EventController extends BaseController
     public function show($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = Event::with(['category'])->findOrFail($id);
+        $event = Event::with(['category', 'attendees'])->findOrFail($id);
+
+        $info['item'] = $event;
+        $info['attendees'] = $event->attendees;
+
         return view($this->showResource(), $info);
     }
 
