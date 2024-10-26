@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

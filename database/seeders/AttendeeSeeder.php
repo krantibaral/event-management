@@ -13,9 +13,7 @@ class AttendeeSeeder extends Seeder
      */
     public function run(): void
     {
-
         $events = Event::all();
-
 
         if ($events->isEmpty()) {
             $this->command->info('No events found. Please run the EventSeeder first.');
@@ -31,16 +29,17 @@ class AttendeeSeeder extends Seeder
             'Jasmin' => 'jasmin@example.com',
         ];
 
-
         $attendeesArray = array_keys($attendees);
         $totalAttendees = count($attendeesArray);
 
-
         foreach ($events as $event) {
+            //at least 1
+            $numberOfAttendees = rand(1, $totalAttendees); // randomly choose between 1 and the total number of attendees
 
-            $numberOfAttendees = rand(2, min(5, $totalAttendees));// rand function to  generate random attendees for an event
+         
+            $selectedAttendees = collect($attendeesArray)->shuffle()->take($numberOfAttendees);   // shuffle and select attendees for the current event
 
-            $selectedAttendees = collect($attendeesArray)->shuffle()->take($numberOfAttendees); //shuffle to create unique attendees for an event
+            // Create attendees for the current event
             foreach ($selectedAttendees as $name) {
                 Attendee::create([
                     'name' => $name,
@@ -48,9 +47,6 @@ class AttendeeSeeder extends Seeder
                     'event_id' => $event->id,
                 ]);
             }
-
-
-            $attendeesArray = array_diff($attendeesArray, $selectedAttendees->toArray()); // remove selected attendees from the original array to prevent duplicates
         }
     }
 }
